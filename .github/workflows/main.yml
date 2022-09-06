@@ -12,6 +12,8 @@ jobs:
       # ... your other steps, such as running tests, etc...
       #
       - name: Set up SSH
+        with:
+          SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
         run: |
           which ssh-agent || ( apk add --update openssh )
           mkdir -p ~/.ssh
@@ -20,10 +22,11 @@ jobs:
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 400 ~/.ssh/id_rsa
         shell: bash
-        # env:
-        #   SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
 
       - name: Deploy
-        run: |
-          $SERVER_USER="${{secrets.SERVER_USER}}" $SERVER_ADDRESS="${{secrets.SERVER_ADDRESS}}" ssh $SERVER_USER@$SERVER_ADDRESS "cd ~/cicd-test && git pull origin main && npm install && npm run build && pm2 startOrRestart .ecosystem.config.js --only cicd-test --env production"
+        with: 
+          SERVER_USER : ${{secrets.SERVER_USER}}
+          SERVER_USER : ${{secrets.SERVER_ADDRESS}}
+        run: 
+          ssh $SERVER_USER@$SERVER_ADDRESS "cd ~/cicd-test && git pull origin main && npm install && npm run build && pm2 startOrRestart .ecosystem.config.js --only cicd-test --env production"
 
