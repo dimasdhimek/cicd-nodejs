@@ -13,7 +13,7 @@ jobs:
           with: # We set all our secrets here for the action, these won't be shown in the action logs
             host: ${{ secrets.SERVER_ADDRESS }}
             username: ${{ secrets.SERVER_USER }}
-            key: ${{ secrets.SERVER_PRIVATE_KEY }}
+            password: ${{ secrets.SERVER_PASSWORD }}
             script: |
               cd ~/cicd-test # we move into our app's folder
               git pull origin main # we pull any changes from git
