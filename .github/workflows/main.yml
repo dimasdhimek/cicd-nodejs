@@ -25,5 +25,8 @@ jobs:
 
       - name: Deploy
         run: |
-          ssh "${{secrets.SERVER_USER}}"@"${{secrets.SERVER_ADDRESS}}"" "cd ~/cicd-test && git pull origin main && npm install && npm run build && pm2 startOrRestart .ecosystem.config.js --only cicd-test --env production"
+          ssh "$SERVER_USER"@$"SERVER_ADDRESS" "cd ~/cicd-test && git pull origin main && npm install && npm run build && pm2 startOrRestart .ecosystem.config.js --only cicd-test --env production"
+        env:
+          SERVER_USER: ${{secrets.SERVER_USER}}
+          SERVER_ADDRESS: ${{secrets.SERVER_ADDRESS}}
 
