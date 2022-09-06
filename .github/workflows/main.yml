@@ -7,30 +7,30 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v2
-        #
-        # ... your other steps, such as running tests, etc...
-        #
-        - name: Set up SSH
-          run: |
-            which ssh-agent || ( apk add --update openssh )
-            mkdir -p ~/.ssh
-            eval $(ssh-agent -s)
-            echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
-            echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-            chmod 400 ~/.ssh/id_rsa
-          shell: bash
-          env:
-            SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
+    steps:
+      - uses: actions/checkout@v2
+      #
+      # ... your other steps, such as running tests, etc...
+      #
+      - name: Set up SSH
+        run: |
+          which ssh-agent || ( apk add --update openssh )
+          mkdir -p ~/.ssh
+          eval $(ssh-agent -s)
+          echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 400 ~/.ssh/id_rsa
+        shell: bash
+        env:
+          SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
 
-        - name: Pre Deploy
-          run: |
-            cd ~/cicd-test
-            git pull origin main
-            npm install
-            npm run build
+      - name: Pre Deploy
+        run: |
+          cd ~/cicd-test
+          git pull origin main
+          npm install
+          npm run build
 
-        - name: Deploy
-          run: pm2 startOrRestart .ecosystem.config.js --only cicd-test --env production
+      - name: Deploy
+        run: pm2 startOrRestart .ecosystem.config.js --only cicd-test --env production
 
