@@ -20,8 +20,8 @@ jobs:
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 400 ~/.ssh/id_rsa
         shell: bash
-        env:
-          SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
+        # env:
+        #   SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
 
       - name: Deploy
         run: |
