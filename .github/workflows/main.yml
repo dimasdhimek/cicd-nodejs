@@ -6,26 +6,18 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
-    steps:
-      #
-      # ... your other steps, such as running tests, etc...
-      #
-      - name: Set up SSH
-        with:
-          SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
-        run: |
-          which ssh-agent || ( apk add --update openssh )
-          mkdir -p ~/.ssh
-          eval $(ssh-agent -s)
-          echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
-          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-          chmod 400 ~/.ssh/id_rsa
-
-      - name: Deploy
-        with: 
-          SERVER_USER : ${{secrets.SERVER_USER}}
-          SERVER_USER : ${{secrets.SERVER_ADDRESS}}
-        run: 
-          ssh $SERVER_USER@$SERVER_ADDRESS "cd ~/cicd-test && git pull origin main && npm install && npm run build && pm2 startOrRestart .ecosystem.config.js --only cicd-test --env production"
-
+      runs-on: ubuntu-latest
+      steps:
+        - name: Deploy to server
+          uses: appleboy/ssh-action@master # An action made to control Linux servers
+          with: # We set all our secrets here for the action, these won't be shown in the action logs
+            host: ${{ secrets.SERVER_ADDRESS }}
+            username: ${{ secrets.SERVER_USER }}
+            key: ${{ secrets.SERVER_PRIVATE_KEY }}
+            script: |
+              cd ~/cicd-test # we move into our app's folder
+              git pull origin main # we pull any changes from git
+              npm prune # we remove any unused dependencies
+              npm install # we install any missing dependencies
+              npm run build # we build our app
+              pm2 startOrRestart .ecosystem.config.js --only cicd-test --env production # we deploy the app via PM2
