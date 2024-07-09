@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: 'cicd-test',
+      name: 'cicd-nodejs',
       script: './dist/app.js',
       watch: 'false',
       exec_mode: 'fork',
