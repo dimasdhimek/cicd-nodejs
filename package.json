@@ -1,5 +1,5 @@
 {
-  "name": "cicd-test",
+  "name": "cicd-nodejs",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dimasdhimek/cicd-test.git"
+    "url": "git+https://github.com/dimasdhimek/cicd-nodejs.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/dimasdhimek/cicd-test/issues"
+    "url": "https://github.com/dimasdhimek/cicd-nodejs/issues"
   },
-  "homepage": "https://github.com/dimasdhimek/cicd-test#readme",
+  "homepage": "https://github.com/dimasdhimek/cicd-nodejs#readme",
   "dependencies": {
     "express": "^4.18.1"
   },
